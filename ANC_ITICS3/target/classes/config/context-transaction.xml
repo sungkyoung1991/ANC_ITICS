@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xsi:schemaLocation=
+				"http://www.springframework.org/schema/beans 
+				 http://www.springframework.org/schema/beans/spring-beans.xsd
+				 http://www.springframework.org/schema/tx
+				 http://www.springframework.org/schema/tx/spring-tx.xsd
+				 http://www.springframework.org/schema/aop 
+				 http://www.springframework.org/schema/aop/spring-aop.xsd">
+				 
+	<!-- PropertyPlaceholderConfigurer 로 로드된 resource 는 ${  } 로 접근 가능 -->
+	<bean	id="propertyConfigurer"
+				class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:common/connection.properties" />
+	</bean>
+
+	<!-- DBCP (Apache Commons Database Connection) 사용 -->
+	  <bean id="dataSource_ITICS" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${ITICS.DRIVERCLASS}"/>
+        <property name="url" value="${ITICS.URL}" />
+        <property name="username" value="${ITICS.USERNAME}"/>
+        <property name="password" value="${ITICS.PASSWORD}"/>
+        <property name="maxActive" value="30" />
+		<property name="maxIdle" value="30" />
+		<property name="maxWait" value="1000" />
+    </bean>
+    
+     <bean id="dataSource_UFMS" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${UFMS.DRIVERCLASS}"/>
+        <property name="url" value="${UFMS.URL}" />
+        <property name="username" value="${UFMS.USERNAME}"/>
+        <property name="password" value="${UFMS.PASSWORD}"/>
+        <property name="maxActive" value="30" />
+		<property name="maxIdle" value="30" />
+		<property name="maxWait" value="1000" />
+    </bean>
+    
+	
+	<!-- TransactioManager instance 생성 -->
+	<bean id="transactionManager_ITICS" 
+				class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >
+		<property name="dataSource" ref="dataSource_ITICS"/>
+	</bean>	
+	
+	<bean id="transactionManager_UFMS" 
+				class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >
+		<property name="dataSource" ref="dataSource_UFMS"/>
+	</bean>	
+	
+	<tx:advice id="txAdvice_ITICS" transaction-manager="transactionManager_ITICS">
+		<tx:attributes>
+			<tx:method 	name="get*" 			propagation="REQUIRED"	read-only="true" />
+			<tx:method	name="add*"	 		propagation="REQUIRED"/>
+			<tx:method	name="update*"	propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<tx:advice id="txAdvice_UFMS" transaction-manager="transactionManager_UFMS">
+		<tx:attributes>
+			<tx:method 	name="get*" 			propagation="REQUIRED"	read-only="true" />
+			<tx:method	name="add*"	 		propagation="REQUIRED"/>
+			<tx:method	name="update*"	propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut 	id="requiredTx" expression="execution(* com.ancintl.ancitics.service..*ServiceImpl.*(..) )" />
+		<aop:advisor 	id="transaction_ITICS" advice-ref="txAdvice_ITICS"  pointcut-ref="requiredTx"  />
+		<aop:advisor 	id="transaction_UFMS" advice-ref="txAdvice_UFMS"  pointcut-ref="requiredTx"  /> 
+	</aop:config>
+
+</beans>

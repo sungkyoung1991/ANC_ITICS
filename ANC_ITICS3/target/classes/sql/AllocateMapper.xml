@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AllocateMapper" >
+
+ 	<resultMap id="allocateSelectMap" type="allocate">
+		<result property="user_id" column="user_id" jdbcType="VARCHAR"/>
+		<result property="user_pw" column="user_pw" jdbcType="VARCHAR"/>
+		<result property="user_mail" column="user_mail" jdbcType="VARCHAR"/>
+		<result property="user_name" column="user_name" jdbcType="VARCHAR"/>
+		<result property="user_auth" column="user_auth" jdbcType="VARCHAR"/>
+		<result property="user_hp" column="user_hp" jdbcType="VARCHAR"/>
+		<result property="user_tel" column="user_tel" jdbcType="VARCHAR"/>
+		
+		<result property="company_name" column="company_name"  jdbcType="VARCHAR" />
+		<result property="company_code" column="company_code" jdbcType="VARCHAR"/>
+		<result property="company_license" column="company_license" jdbcType="VARCHAR"/>
+		<result property="company_type" column="company_type" jdbcType="VARCHAR"/>
+		
+		<result property="gps_url" column="gps_url" jdbcType="VARCHAR"/>
+		<result property="gps_id" column="gps_id" jdbcType="VARCHAR"/>
+		<result property="gps_pw" column="gps_pw" jdbcType="VARCHAR"/>
+		
+		<result property="input_id" column="input_id" jdbcType="VARCHAR"/>
+		<result property="input_date" column="input_date" jdbcType="VARCHAR"/>
+		<result property="input_ip" column="input_ip" jdbcType="VARCHAR"/>
+		<result property="input_comName" column="input_comName" jdbcType="VARCHAR"/>
+		
+		<result property="modi_id" column="modi_id" jdbcType="VARCHAR"/>
+		<result property="modi_date" column="modi_date" jdbcType="VARCHAR"/>
+		<result property="modi_ip" column="modi_ip" jdbcType="VARCHAR"/>
+		<result property="modi_comName" column="modi_comName" jdbcType="VARCHAR"/>
+	
+	</resultMap>
+	
+</mapper>

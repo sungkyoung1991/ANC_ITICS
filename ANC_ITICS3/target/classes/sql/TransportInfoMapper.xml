@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="TransportInfoMapper" >
+
+ 	<resultMap id="transportSelectMap" type="transport">
+		<result property="express_name" column="express_name" jdbcType="VARCHAR"/>
+		<result property="express_code" column="car_type" jdbcType="VARCHAR"/>
+		<result property="truck_type" column="truck_type" jdbcType="VARCHAR"/>
+		<result property="car_no" column="car_no" jdbcType="VARCHAR"/>
+		<result property="car_id" column="car_id" jdbcType="VARCHAR"/>
+		<result property="driver_name" column="driver_name" jdbcType="VARCHAR"/>
+		<result property="driver_hp" column="driver_hp" jdbcType="VARCHAR"/>
+		
+		<result property="status_yn" column="status_yn"  jdbcType="VARCHAR" />
+		<result property="input_id" column="input_id" jdbcType="VARCHAR"/>
+		<result property="input_ip" column="input_ip" jdbcType="VARCHAR"/>
+		<result property="input_comName" column="input_comName" jdbcType="VARCHAR"/>
+		
+		<result property="input_date" column="input_date" jdbcType="VARCHAR"/>
+		<result property="modi_id" column="modi_id" jdbcType="VARCHAR"/>
+		<result property="modi_ip" column="modi_ip" jdbcType="VARCHAR"/>
+		
+		<result property="modi_comName" column="modi_comName" jdbcType="VARCHAR"/>
+		<result property="modi_date" column="modi_date" jdbcType="VARCHAR"/>
+		<result property="car_size" column="car_size" jdbcType="VARCHAR"/>
+		
+	</resultMap>
+	
+	<select  id="transportSelect"  parameterType="hashmap" resultMap="transportSelectMap">
+	
+	DECLARE @RowsPerPage INT = #{params.limit}, @PageNumber INT = #{params.page} 
+		select * from TransportInfo
+			where express_code = #{params.express_code} 
+			and car_no like '%${params.car_no}%' 
+				order by car_id
+		OFFSET (@PageNumber-1)*@RowsPerPage ROWS
+		FETCH NEXT @RowsPerPage ROWS ONLY 
+							
+	 </select>
+	 
+	
+	  <select  id="getListCount"  parameterType="hashmap"	 resultType="int">
+	  
+	  		select count(*) as count from TransportInfo
+				where car_no like '%${params.car_no}%'
+				and express_code = #{params.express_code}
+	  	
+	 </select> 
+	 
+	 
+	
+	 
+</mapper>
